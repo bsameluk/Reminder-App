@@ -13,15 +13,18 @@ gem "jbuilder"                            # Build JSON APIs with ease [https://g
 gem "tzinfo-data", platforms: %i[ windows jruby ] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "bootsnap", require: false            # Reduces boot times through caching; required in config/boot.rb
 
-# gem "redis", ">= 4.0.1"                   # Use Redis adapter to run Action Cable in production
+gem "redis"
+gem 'sidekiq'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
-  
 end
 
 group :development do
   gem "web-console"
+  gem 'annotate'
+  gem 'pry-byebug'
+  gem 'pry-rails'
 end
 
 group :test do
