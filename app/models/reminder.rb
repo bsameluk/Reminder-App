@@ -44,7 +44,6 @@ class Reminder < ApplicationRecord
   end
 
   def broadcast_reminder
-    puts "------------- TRIGGERED -------------------"
     InitReminderSyncJob.perform_async(id)
   end
 end

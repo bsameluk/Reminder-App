@@ -12,6 +12,9 @@ Development setup (docker):
   docker-compose run app ./bin/rails db:create db:migrate
   docker-compose up
 
+  --stop
+  docker-compose down
+
 Development setup (manual):
   --rails
     bundle install
@@ -21,5 +24,15 @@ Development setup (manual):
     ./bin/sidekiq
   --redis
     redis-server
+
+--------------------------------
+
+Production setup (docker):
+  docker-compose -f docker-compose.prod.yml build
+  docker-compose -f docker-compose.prod.yml run app ./bin/rails db:create db:migrate
+  docker-compose -f docker-compose.prod.yml up -d
+
+  --stop
+  docker-compose -f docker-compose.prod.yml down
 
 

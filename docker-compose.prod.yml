@@ -1,0 +1,79 @@
+version: "1.0"
+
+services:
+  app:
+    build:
+      context: .
+    image: reminder_app:latest
+    container_name: reminder_app_prod
+    ports:
+      - "3000:3000"
+    volumes:
+      - gems:/gems
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: "postgresql://postgres:password@db:5432/reminder_app_production"
+      REDIS_URL: "redis://redis:6379/0"
+      SECRET_KEY_BASE: "e0937c9d29d52b22e0ac9c70d0170d1e370c3172a217efab5a6f2a0e9a0e2908df09c8f5e708d7c2e8d8a1a1c0a0a1"
+    depends_on:
+      - db
+      - redis
+    expose:
+      - "3000"
+    command: bundle exec puma -C config/puma.rb
+    env_file:
+      - .env.prod
+
+  sidekiq:
+    build:
+      context: .
+    image: reminder_app:latest
+    container_name: sidekiq_prod
+    volumes:
+      - gems:/gems
+    depends_on:
+      - redis
+      - db
+    environment:
+      RAILS_ENV: production
+      REDIS_URL: "redis://redis:6379/0"
+      DATABASE_URL: "postgresql://postgres:password@db:5432/reminder_app_production"
+      SECRET_KEY_BASE: "e0937c9d29d52b22e0ac9c70d0170d1e370c3172a217efab5a6f2a0e9a0e2908df09c8f5e708d7c2e8d8a1a1c0a0a1"
+    command: bundle exec sidekiq
+    env_file:
+      - .env.prod
+
+  db:
+    image: postgres:14
+    container_name: reminder_db_prod
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "password"
+    volumes:
+      - db_data_prod:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env.prod
+
+  redis:
+    image: redis:7
+    container_name: reminder_redis_prod
+    ports:
+      - "6379:6379"
+
+  nginx:
+    image: nginx:latest
+    container_name: reminder_nginx
+    depends_on:
+      - app
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+
+volumes:
+  db_data_prod:
+  gems:
