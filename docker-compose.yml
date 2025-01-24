@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: .
+    image: my_reminder_app:latest
+    container_name: reminder_app
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+    depends_on:
+      - db
+      - redis
+    environment:
+      DATABASE_URL: "postgresql://postgres:password@db:5432/reminder_app_development"
+      REDIS_URL: "redis://redis:6379/0"
+      RAILS_ENV: "development"
+
+  sidekiq:
+    build:
+      context: .
+    image: my_reminder_app:latest
+    container_name: rails_sidekiq
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+    depends_on:
+      - redis
+      - db
+    command: bundle exec sidekiq
+    environment:
+      DATABASE_URL: "postgresql://postgres:password@db:5432/reminder_app_development"
+      REDIS_URL: "redis://redis:6379/0"
+      RAILS_ENV: "development"
+
+  db:
+    image: postgres:14
+    container_name: rails_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    container_name: rails_redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  db_data:
+  bundle_cache:
