@@ -35,11 +35,16 @@ class Reminder < ApplicationRecord
   validates :frequency, presence: true, inclusion: { in: Frequencies::ALL }
   validates :timezone,  presence: true
 
-  after_commit :broadcast_reminder , on:  [:create, :update]
+  after_commit :broadcast_reminder , on:  [:create, :update], if: :scheduled_at_changed?
 
   private
 
+  def scheduled_at_changed?
+    saved_change_to_attribute?(:scheduled_at)
+  end
+
   def broadcast_reminder
+    puts "------------- TRIGGERED -------------------"
     InitReminderSyncJob.perform_async(id)
   end
 end
