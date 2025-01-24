@@ -7,6 +7,8 @@ anyone can access and manage their reminders without logging in or registering.
 * Ruby version
 3.3.0
 
+--------------- LOCAL SETUP (WITH DOCKER) -------------------
+
 Development setup (docker):
   docker-compose build
   docker-compose run app ./bin/rails db:create db:migrate
@@ -14,6 +16,8 @@ Development setup (docker):
 
   --stop
   docker-compose down
+
+--------------- LOCAL SETUP -------------------
 
 Development setup (manual):
   --rails
@@ -25,7 +29,7 @@ Development setup (manual):
   --redis
     redis-server
 
---------------------------------
+--------------- PRODUCTION SETUP -------------------
 
 Production setup (docker):
   docker-compose -f docker-compose.prod.yml build
@@ -36,3 +40,5 @@ Production setup (docker):
   docker-compose -f docker-compose.prod.yml down
 
 
+--------------- TESTS -------------------
+bundle exec rspec

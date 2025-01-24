@@ -18,13 +18,17 @@ gem 'sidekiq'
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
+  gem 'rspec-rails'
+  gem 'shoulda-matchers'
+  gem 'pry-byebug'
+  gem 'pry-rails'
+  gem 'rspec-sidekiq'
+  gem 'rails-controller-testing'
 end
 
 group :development do
   gem "web-console"
   gem 'annotate'
-  gem 'pry-byebug'
-  gem 'pry-rails'
 end
 
 group :test do
