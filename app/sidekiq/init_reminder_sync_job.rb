@@ -1,4 +1,4 @@
-class CreateReminderHistoryJob
+class InitReminderSyncJob
   include Sidekiq::Job
 
   attr_accessor :reminder, :reminder_history

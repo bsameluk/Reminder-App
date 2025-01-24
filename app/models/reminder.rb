@@ -40,6 +40,6 @@ class Reminder < ApplicationRecord
   private
 
   def broadcast_reminder
-    CreateReminderHistoryJob.perform_async(id)
+    InitReminderSyncJob.perform_async(id)
   end
 end

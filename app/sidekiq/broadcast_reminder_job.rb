@@ -10,7 +10,7 @@ class BroadcastReminderJob
     begin
       _init_action_cable
       @reminder_history.update(status: ReminderHistory::Statuses::DONE, job_id: nil)
-      @reminder.update(scheduled_at: @reminder.next_scheduled_at)
+      _init_new_reminder_history
     rescue => e
       @reminder_history.update(status: ReminderHistory::Statuses::FAILED)
       raise e
@@ -27,5 +27,9 @@ class BroadcastReminderJob
         reminder_history_id: @reminder_history.id,
       }
     })
+  end
+
+  def _init_new_reminder_history_job
+    @reminder.update(scheduled_at: @reminder.next_scheduled_at)
   end
 end

@@ -1,27 +1,33 @@
 # syntax = docker/dockerfile:1
 
-ARG RUBY_VERSION=3.3.0
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim
+FROM ruby:3.3.0-slim
 
-WORKDIR /rails
+WORKDIR /app
 
-ENV RAILS_ENV="development" \
-    BUNDLE_PATH="/usr/local/bundle"
+# Устанавливаем переменные окружения
+ENV RAILS_ENV=development \
+    BUNDLE_PATH=/gems \
+    BUNDLE_JOBS=4 \
+    BUNDLE_RETRY=3
 
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y \
+# Устанавливаем зависимости
+RUN apt-get update -qq && apt-get install --no-install-recommends -y \
     build-essential \
     libpq-dev \
-    pkg-config \
-    nodejs \
+    curl \
     git && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    rm -rf /var/lib/apt/lists/*
 
+# Копируем Gemfile
 COPY Gemfile Gemfile.lock ./
+
+# Устанавливаем гемы
 RUN bundle install
 
+# Копируем приложение
 COPY . .
 
+# Expose для development
 EXPOSE 3000
 
-CMD ["./bin/rails", "server", "-b", "0.0.0.0"]
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
