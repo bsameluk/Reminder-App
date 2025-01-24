@@ -23,24 +23,23 @@ class Reminder < ApplicationRecord
   include Frequencies
   include ScheduledAt
 
-
   # associations
   has_many :reminder_histories, dependent: :destroy
 
   # validates
   validates :title,         presence: true
-  validates :scheduled_at,  presence: true, comparison: { greater_than_or_equal_to: ->(record) { record.min_scheduled_at },
+  validates :scheduled_at,  presence: true, comparison: { greater_than_or_equal_to: ->(record) { record.min_next_scheduled_at },
                                                           message: 'must be in the future' }
   validates :price,         presence: true
   validates :currency,  presence: true, length: { is: 3 }, inclusion: { in: Currencies::ALL }
   validates :frequency, presence: true, inclusion: { in: Frequencies::ALL }
   validates :timezone,  presence: true
 
-  after_commit :broadcast_reminder , on:  :create
+  after_commit :broadcast_reminder , on:  [:create, :update]
 
   private
 
   def broadcast_reminder
-    BroadcastReminderJob.perform_at(scheduled_at, id)
+    CreateReminderHistoryJob.perform_async(id)
   end
 end

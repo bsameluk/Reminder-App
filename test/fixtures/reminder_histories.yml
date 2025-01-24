@@ -4,9 +4,10 @@
 #
 #  id           :bigint           not null, primary key
 #  scheduled_at :datetime         not null
-#  status       :enum             default("Pending"), not null
+#  status       :enum             default("pending"), not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  job_id       :string
 #  reminder_id  :bigint           not null
 #
 # Indexes

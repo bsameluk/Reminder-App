@@ -3,7 +3,7 @@ class RemindersController < ApplicationController
   before_action :set_reminder, only: %i[ destroy ]
 
   def index
-    @reminders = Reminder.all
+    @reminders = Reminder.all.order(scheduled_at: :desc)
   end
 
   def new
@@ -15,6 +15,21 @@ class RemindersController < ApplicationController
     @reminder.scheduled_at = parse_scheduled_at
 
     if @reminder.save
+      redirect_to reminders_path, notice: "Reminder (#{@reminder.title}) was successfully created."
+    else
+      @reminder.scheduled_at = nil
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def edit
+    @reminder = Reminder.find(params[:id])
+  end
+
+  def update
+    @reminder = Reminder.find(params[:id])
+
+    if @reminder.update(**reminder_params, scheduled_at: parse_scheduled_at)
       redirect_to reminders_path, notice: "Reminder (#{@reminder.title}) was successfully created."
     else
       @reminder.scheduled_at = nil

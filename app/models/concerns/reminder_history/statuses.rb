@@ -4,13 +4,15 @@ module ReminderHistory::Statuses
   PENDING = 'Pending'.freeze
   DONE = 'Done'.freeze
   FAILED = 'Failed'.freeze
+  CANCELED = 'Canceled'.freeze
 
   DICT = {
     pending: PENDING,
     done: DONE,
-    failed: FAILED
+    failed: FAILED,
+    canceled: CANCELED
   }.freeze
-  ALL = [PENDING, DONE, FAILED].freeze
+  ALL = [PENDING, DONE, FAILED, CANCELED].freeze
 
   def status
     self.class.statuses[super]

@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_01_23_183536) do
+ActiveRecord::Schema[7.1].define(version: 2025_01_23_214337) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   # Custom types defined in this database.
   # Note that some types may not work with other database engines. Be careful if changing database.
-  create_enum "reminder_frequency", ["One-Time", "Each day", "Each week", "Each month"]
-  create_enum "reminder_histories_status", ["Pending", "Done", "Failed"]
+  create_enum "reminder_frequency", ["One-Time", "Each day", "Each week", "Each month", "Each 2 minutes", "Each 5 minutes"]
+  create_enum "reminder_histories_status", ["Pending", "Done", "Failed", "Canceled"]
 
   create_table "reminder_histories", force: :cascade do |t|
     t.bigint "reminder_id", null: false
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_01_23_183536) do
     t.enum "status", default: "Pending", null: false, enum_type: "reminder_histories_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "job_id"
     t.index ["reminder_id"], name: "index_reminder_histories_on_reminder_id"
   end
 

@@ -4,9 +4,10 @@
 #
 #  id           :bigint           not null, primary key
 #  scheduled_at :datetime         not null
-#  status       :enum             default("Pending"), not null
+#  status       :enum             default("pending"), not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  job_id       :string
 #  reminder_id  :bigint           not null
 #
 # Indexes
@@ -31,4 +32,11 @@ class ReminderHistory < ApplicationRecord
 
   # associations
   belongs_to :reminder
+
+  # scopes
+  scope :active, -> { where(status: ReminderHistory::Statuses::PENDING) }
+
+  def is_due?
+    scheduled_at <= Time.now
+  end
 end

@@ -2,7 +2,7 @@ require 'sidekiq/web'
 
 Rails.application.routes.draw do
 
-  resources :reminders, only: [:index, :new, :create, :destroy]
+  resources :reminders
 
   root "reminders#index"
   mount ActionCable.server => '/cable'
