@@ -2,6 +2,8 @@
 
 A simple **Reminder App** built with **Ruby on Rails** that allows users to create, view, edit, and delete reminders without requiring authentication. Anyone can access and manage reminders without logging in or registering.
 
+DEMO - https://ec2-51-21-128-146.eu-north-1.compute.amazonaws.com/
+
 ## Ruby version
 - 3.3.0
 
