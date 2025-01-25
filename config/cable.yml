@@ -6,7 +6,15 @@ development:
 test:
   adapter: test
 
+# production:
+#   adapter: redis
+#   url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+#   channel_prefix: reminder_app_production
+
 production:
   adapter: redis
-  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  url: redis://redis:6379/1
   channel_prefix: reminder_app_production
+  allowed_request_origins:
+    - https://51.21.128.146
+    - https://ec2-51-21-128-146.eu-north-1.compute.amazonaws.com
