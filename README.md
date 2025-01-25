@@ -42,3 +42,12 @@ Production setup (docker):
 
 --------------- TESTS -------------------
 bundle exec rspec
+
+
+
+--------------- CLEAN ALL -------------------
+docker-compose down --volumes --remove-orphans
+docker-compose -f docker-compose.prod.yml build --no-cache
+docker-compose -f docker-compose.prod.yml up --force-recreate
+
+docker system prune -a --volumes

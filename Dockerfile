@@ -18,18 +18,20 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -y \
     git && \
     rm -rf /var/lib/apt/lists/*
 
-# Копируем Gemfile
+# Копируем только файлы для установки гемов
 COPY Gemfile Gemfile.lock ./
 
-# Устанавливаем гемы
-RUN bundle install
+# Устанавливаем гемы (принудительное очищение кеша)
+RUN bundle install --clean
 
-# Копируем приложение
+# Копируем всё приложение
 COPY . .
+
+# Компилируем ассеты для production
+RUN RAILS_ENV=production SECRET_KEY_BASE=dummy_key bundle exec rails assets:precompile
 
 # Expose для development
 EXPOSE 3000
 
-RUN RAILS_ENV=production SECRET_KEY_BASE=e0937c9d29d52b22e0ac9c70d0170d1e370c3172a217efab5a6f2a0e9a0e2908df09c8f5e708d7c2e8d8a1a1c0a0a1 bundle exec rails assets:precompile
-
+# Основная команда
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0", "-p", "3000"]
