@@ -13,7 +13,7 @@ gem "jbuilder"                            # Build JSON APIs with ease [https://g
 gem "tzinfo-data", platforms: %i[ windows jruby ] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "bootsnap", require: false            # Reduces boot times through caching; required in config/boot.rb
 
-gem "redis"
+gem 'redis', '~> 4.8.0'
 gem 'sidekiq'
 
 group :development, :test do
